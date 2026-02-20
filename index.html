@@ -233,7 +233,6 @@ tr button {
     <h2>📦 Panel</h2>
     <a onclick="showView('dashboard')">📊 Dashboard</a>
     <a onclick="showView('orders')">📋 Zamówienia</a>
-    <a onclick="showView('history')">📜 Historia</a>
     <a onclick="showView('settings')">⚙️ Ustawienia</a>
 </div>
 
@@ -280,23 +279,6 @@ tr button {
         </div>
     </div>
 
-    <div id="history" class="view">
-        <div class="orders-card">
-            <h3 style="margin-bottom: 15px;">📜 Historia zamówień</h3>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Nazwa</th>
-                        <th>Sklep</th>
-                        <th>Data</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
-                <tbody id="historyList"></tbody>
-            </table>
-        </div>
-    </div>
-
     <div id="settings" class="view">
         <div class="form-card">
             <h3 style="margin-bottom: 15px;">⚙️ Ustawienia</h3>
@@ -312,9 +294,7 @@ let sortAsc = true;
 
 function renderOrders() {
     const ordersList = document.getElementById('ordersList');
-    const historyList = document.getElementById('historyList');
     ordersList.innerHTML = '';
-    historyList.innerHTML = '';
 
     let filtered = orders.filter(order => {
         if (filter === 'all') return true;
@@ -323,10 +303,8 @@ function renderOrders() {
     });
 
     filtered.forEach((order, index) => {
-        // Dla tabeli z przyciskami
         const tr = document.createElement('tr');
         tr.className = order.odebrane ? 'odebrane' : '';
-        // Dla małych ekranów dodajemy atrybuty data-label
         tr.innerHTML = `
             <td data-label="Nazwa">${order.nazwa}</td>
             <td data-label="Sklep">${order.sklep}</td>
@@ -338,17 +316,6 @@ function renderOrders() {
             </td>
         `;
         ordersList.appendChild(tr);
-
-        // Dla historii (bez przycisków)
-        const htr = document.createElement('tr');
-        htr.className = order.odebrane ? 'odebrane' : '';
-        htr.innerHTML = `
-            <td data-label="Nazwa">${order.nazwa}</td>
-            <td data-label="Sklep">${order.sklep}</td>
-            <td data-label="Data">${order.data}</td>
-            <td data-label="Status">${order.odebrane ? 'Odebrane' : 'Nieodebrane'}</td>
-        `;
-        historyList.appendChild(htr);
     });
     
     localStorage.setItem('orders', JSON.stringify(orders));
